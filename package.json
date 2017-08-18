@@ -4,9 +4,10 @@
   "description": "Make polls of your choice and vote!",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js"
+    "start": "cd views && ng build --prod && cd .. && node server.js"
   },
   "dependencies": {
+    "@angular/cli": "^1.3.1",
     "express": "^4.15.4",
     "http": "0.0.0",
     "path": "^0.12.7"
