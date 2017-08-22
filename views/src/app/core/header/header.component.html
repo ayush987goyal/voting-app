@@ -5,11 +5,19 @@
       </div>
       <div class=" collapse navbar-collapse">
           <ul class="nav navbar-nav">
-              <li routerLinkAcive="active"><a routerLink="/">New Poll</a></li>
-              <li routerLinkAcive="active"><a routerLink="/">My Polls</a></li>
+                <ng-template [ngIf]="isValid">
+                    <li routerLinkActive="active"><a routerLink="/">New Poll</a></li>
+                    <li routerLinkActive="active"><a routerLink="/">My Polls</a></li>
+                </ng-template>
           </ul>
           <ul class="nav navbar-nav navbar-right">
-              <li><a routerLink="/login">Login</a></li>
+                <ng-template [ngIf]="!isValid" > 
+                    <li><a routerLink="/login">Login</a></li>
+                </ng-template>
+                <ng-template [ngIf]="isValid">
+                    <li><a style="cursor: pointer;">{{userFirstName}}</a></li>
+                    <li><a style="cursor: pointer;" (click)="onSignOut()">Logout</a></li>
+                </ng-template>
           </ul>
       </div>
   </div>
