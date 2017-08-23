@@ -1,0 +1,24 @@
+<div class="container">
+  <div class="jumbotron">
+    <div class="row">
+      <div class="header">Create a new poll</div><br><br>
+    </div>
+    <div class="row">
+      <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+        <div class="form-group">
+          <label for="name">Name</label>
+          <input type="text" id="name" class="form-control" name="name" ngModel required>
+        </div>
+        <div class="form-group">
+          <label for="options">Options</label>
+          <div class=" form" *ngFor="let option of pollOptions; let i = index; trackBy: trackByFn" name="options">
+            <input type="text" class="form-control" style="margin-top:10px" [value]="option" name="option-{{i+1}}" [(ngModel)]="pollOptions[i]"
+              required>
+          </div>
+        </div>
+        <button class="btn btn-primary" type="button" (click)="addOption()">Add option</button>
+        <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Submit</button>
+      </form>
+    </div>
+  </div>
+</div>

@@ -107,10 +107,11 @@ export class AuthService {
       userLastName: this.userLastName
     });
 
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 
   isAuthenticated() {
     return this.token != null;
+    // return true;
   }
 }
