@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: 'mypolls', component: MypollsComponent, canActivate: [AuthGuard]},
   { path: 'newpoll', component: NewpollComponent, canActivate: [AuthGuard]},
   { path: 'login', component: LoginComponent},
-  { path: ':id', component: PollComponent},
+  { path: 'poll/:id', component: PollComponent},
 ];
 
 @NgModule({

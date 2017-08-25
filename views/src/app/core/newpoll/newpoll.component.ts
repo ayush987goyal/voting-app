@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NgForm } from "@angular/forms";
+import { MongoService } from '../../mongo.service';
 
 @Component({
   selector: 'app-newpoll',
@@ -13,7 +14,7 @@ export class NewpollComponent implements OnInit {
 
   @ViewChild('f') form: NgForm;
 
-  constructor() { }
+  constructor(private mongoService: MongoService) { }
 
   ngOnInit() {
   }
@@ -27,8 +28,19 @@ export class NewpollComponent implements OnInit {
   }
 
   onSubmit(form) {
-    console.log(this.form.value.name);
-    console.log(this.pollOptions);
+    let opts = [];
+    for(let opt of this.pollOptions){
+      opts.push({
+        name: opt,
+        voteCount: 0
+      });
+    }
+    let poll = {
+      name: this.form.value.name,
+      options: opts
+    };
+    this.mongoService.saveNewPoll(poll);
+    this.form.reset();
   }
 
 }

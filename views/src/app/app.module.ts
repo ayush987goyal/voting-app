@@ -4,6 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { FormsModule } from "@angular/forms";
 import { HttpModule } from '@angular/http';
+import { APP_BASE_HREF } from '@angular/common';
 
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './core/header/header.component';
@@ -13,6 +14,7 @@ import { AuthModule } from './auth/auth.module';
 import { NewpollComponent } from './core/newpoll/newpoll.component';
 import { MypollsComponent } from './core/mypolls/mypolls.component';
 import { PollComponent } from './core/poll/poll.component';
+import { MongoService } from './mongo.service';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,7 @@ import { PollComponent } from './core/poll/poll.component';
     FormsModule,
     HttpModule
   ],
-  providers: [],
+  providers: [MongoService],//, {provide: APP_BASE_HREF, useValue: '/polls'}],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
