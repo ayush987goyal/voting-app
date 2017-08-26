@@ -9,7 +9,7 @@ var app = express();
 var server = http.createServer(app);
 
 app.use(bodyParser.json());
-// app.use(express.static(path.resolve(__dirname, 'views/dist')));
+app.use(express.static(path.resolve(__dirname, 'views/dist')));
 
 
 app.get('/polls', (req, res) => {
@@ -66,9 +66,9 @@ app.post('/newpoll', (req, res) => {
     })
 })
 
-// app.get('/*', (req, res) => {
-//     res.sendFile(path.resolve(__dirname, 'views/dist/index.html'));
-// })
+app.get('/*', (req, res) => {
+    res.sendFile(path.resolve(__dirname, 'views/dist/index.html'));
+})
 
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0",  () => {
     var addr = server.address();
