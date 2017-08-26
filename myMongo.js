@@ -71,7 +71,8 @@ exports.updatePoll = function (poll, callback) {
             _id : ObjectId(poll.pollId)
         }, {
             $set: {
-                poll: poll.pollData
+                poll: poll.pollData,
+                votedUsers: poll.pollVotedUsers
             }
         }, (err, data) => {
             if(err) throw err;

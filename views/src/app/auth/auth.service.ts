@@ -113,9 +113,12 @@ export class AuthService {
   onSignOut() {
     firebase.auth().signOut();
     this.token = null;
+    this.userEmail = '';
+    this.userName = '';
     this.validityUpdated.next({
       isValid: this.isAuthenticated(),
-      userName: this.userName
+      userName: this.userName,
+      userEmail: this.userEmail
     });
 
     this.router.navigate(['/']);

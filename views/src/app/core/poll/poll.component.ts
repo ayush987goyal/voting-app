@@ -12,10 +12,12 @@ import { AuthService } from '../../auth/auth.service';
 export class PollComponent implements OnInit {
 
   id: string;
+  userIp: string;
   poll;
   pollUser: string;
   pollName: string;
   pollOptions = [];
+  pollVotedUsers = [];
   choice = '';
   dialogVisible = false;
   isLoading: boolean = false;
@@ -41,6 +43,7 @@ export class PollComponent implements OnInit {
             this.pollUser = res[0].user;
             this.pollName = res[0].poll.name;
             this.pollOptions = res[0].poll.options;
+            this.pollVotedUsers = res[0].votedUsers;
             this.isLoading = false;
 
             let tempData: number[] = [];
@@ -65,6 +68,14 @@ export class PollComponent implements OnInit {
     );
     this.isValid = this.authService.isAuthenticated();
     this.mainUser = this.authService.userEmail;
+    this.mongoService.getIp().subscribe(
+      (res) => {
+        this.userIp = res.ip;
+      },
+      (err) => {
+        console.log(err);
+      }
+    );
   }
 
   choiceChange(option) {
@@ -85,29 +96,59 @@ export class PollComponent implements OnInit {
   }
 
   updatePoll() {
-    this.poll.poll.options = this.pollOptions;
-    let obj = {
-      pollId: this.id,
-      pollData: this.poll.poll
-    };
-    this.mongoService.updatePollById(obj).subscribe(
-      (res) => {
-        // console.log(res);
-        this.ngOnInit();
-      },
-      (err) => {
-        console.log(err);
+    if (this.hasUserVoted()) {
+      alert("You have already voted")
+    }
+    else {
+      this.poll.poll.options = this.pollOptions;
+      if (this.mainUser) {
+        this.poll.votedUsers.push(this.mainUser);
       }
-    );
+      else {
+        this.poll.votedUsers.push(this.userIp);
+      }
+      let obj = {
+        pollId: this.id,
+        pollData: this.poll.poll,
+        pollVotedUsers: this.poll.votedUsers
+      };
+      this.mongoService.updatePollById(obj).subscribe(
+        (res) => {
+          // console.log(res);
+          this.ngOnInit();
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    }
+  }
+
+  hasUserVoted() {
+    if (this.pollVotedUsers) {
+      if (this.mainUser) {
+        if (this.pollVotedUsers.indexOf(this.mainUser) >= 0) {
+          return true;
+        }
+      }
+      if (this.pollVotedUsers.indexOf(this.userIp) >= 0) {
+        return true;
+      }
+
+      return false;
+    }
+    return false;
   }
 
   onVote() {
+
     for (let opt of this.pollOptions) {
       if (opt.name === this.choice) {
         opt.voteCount++;
         break;
       }
     }
+    this.choice = '';
     this.updatePoll();
   }
 

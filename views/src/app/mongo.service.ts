@@ -11,11 +11,18 @@ export class MongoService {
   saveNewPoll(obj: any) {
     let pollData = {
       user: this.authService.userEmail,
-      poll: obj
+      poll: obj,
+      votedUsers: []
     };
 
     return this.http.post('/newpoll', pollData).map(
       (res) => { return res.json(); }
+    );
+  }
+
+  getIp() {
+    return this.http.get('/ip').map(
+      (res) => {return res.json();}
     );
   }
 

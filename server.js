@@ -3,12 +3,13 @@ var path = require('path');
 var express = require('express');
 var myMongo = require('./myMongo');
 var bodyParser = require('body-parser');
+var requestIp = require('request-ip');
 
 var app = express();
 var server = http.createServer(app);
 
 app.use(bodyParser.json());
-app.use(express.static(path.resolve(__dirname, 'views/dist')));
+// app.use(express.static(path.resolve(__dirname, 'views/dist')));
 
 
 app.get('/polls', (req, res) => {
@@ -17,6 +18,12 @@ app.get('/polls', (req, res) => {
 
         res.send(data);
     })
+})
+
+app.get('/ip', (req, res) => {
+    res.send({
+        ip: requestIp.getClientIp(req)
+    });
 })
 
 app.get('/polls/:id', (req, res) => {
