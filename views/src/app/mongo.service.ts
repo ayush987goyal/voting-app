@@ -14,25 +14,38 @@ export class MongoService {
       poll: obj
     };
 
-    this.http.post('/newpoll', pollData).subscribe(
-      (res) => {
-        console.log(res["_body"]);
-      },
-      (err) => {
-        console.log(err);
-      }
+    return this.http.post('/newpoll', pollData).map(
+      (res) => { return res.json(); }
     );
   }
 
   getAllPolls() {
     return this.http.get('/polls').map(
-      (res) => {return res.json();}
+      (res) => { return res.json(); }
     );
   }
 
   getPollById(id) {
     return this.http.get('/polls/' + id).map(
-      (res) => {return res.json();}
+      (res) => { return res.json(); }
+    );
+  }
+
+  getPollsByUser(user) {
+    return this.http.get('/pollsMy/' + user).map(
+      (res) => { return res.json(); }
+    )
+  }
+
+  updatePollById(poll) {
+    return this.http.post('/pollsMy', poll).map(
+      (res) => { return res.json(); }
+    );
+  }
+
+  deletePollById(id) {
+    return this.http.get('/pollDel/' + id).map(
+      (res) => { return res.json(); }
     );
   }
 }

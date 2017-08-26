@@ -1,3 +1,52 @@
-<p>
-  {{id}}
-</p>
+<div class="container">
+  <div class="jumbotron">
+    <div class="row">
+      <div class="col-md-6">
+        <div *ngIf="isLoading">
+          <i class="fa fa-spinner fa-pulse fa-3x fa-fw inner"></i>
+          <span class="sr-only">Loading...</span>
+        </div><br>
+        <div class="header">
+          {{pollName}}
+        </div>
+        <div>
+          <div class="radio form-group" *ngFor="let opt of pollOptions; let i = index">
+            <label><input type="radio" name="pollChoice" value="opt.name" (change)="choiceChange(opt.name)" >{{opt.name}}</label>
+          </div>
+        </div>
+        <br>
+        <div class="row">
+          <div class="col-md-2">
+            <button *ngIf="!isLoading" class="btn btn-success" (click)="onVote()">Vote!</button>
+          </div>
+          <div class="col-md-1">
+            <button *ngIf="!isLoading" type="button" class="btn btn-primary" (click)="onCustomChoice()">Custom choice</button>
+          </div>
+        </div>
+        <br>
+        <div class="row ">
+          <div class="col-md-12">
+            <button *ngIf="!isLoading && isValid && (pollUser === mainUser)" type="button " class="btn btn-danger " (click)="onDelete() ">Delete poll</button>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 ">
+        <div style="display: block ">
+          <canvas baseChart *ngIf="pieChartData && pieChartData.length> 0" [data]="pieChartData" [labels]="pieChartLabels" [chartType]="pieChartType"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div>
+  <p-dialog header="Custom choice" [showHeader]="false" [(visible)]="dialogVisible" modal="modal" width="300">
+    <form (ngSubmit)="onSubmit(f)" #f="ngForm">
+      <div class="form-group">
+        <label for="custom">Custom option</label>
+        <input class="form-control" type="text" name="custom" id="custom" required ngModel>
+      </div>
+      <button class="btn btn-primary" type="submit" [disabled]="!f.valid">Add and Vote</button>
+      <button class="btn btn-danger" type="button" (click)="dialogToggle()">Close</button>
+    </form>
+  </p-dialog>
+</div>

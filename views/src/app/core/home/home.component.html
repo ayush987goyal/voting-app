@@ -4,6 +4,10 @@
       <div class="header">
         Welcome to VoteNox!
       </div>
+      <div *ngIf="isLoading">
+        <i class="fa fa-spinner fa-pulse fa-3x fa-fw inner"></i>
+        <span class="sr-only">Loading...</span>
+      </div>
       <a *ngFor="let item of pollList; let i = index" (click)="onClickPoll(i)" style="cursor: pointer">
         <div class="form-control" style="margin-top: 10px;">
           {{item["name"]}}

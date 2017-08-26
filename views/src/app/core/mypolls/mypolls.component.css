@@ -1,0 +1,8 @@
+.inner {
+  display: table;
+  margin: 0 auto;
+}
+
+.header {
+  font-size: 35px;
+}

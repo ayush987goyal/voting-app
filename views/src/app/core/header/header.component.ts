@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import { Subscription } from 'rxjs/Subscription';
 declare const gapi: any;
@@ -11,23 +11,20 @@ declare const gapi: any;
 export class HeaderComponent implements OnInit, OnDestroy, OnChanges {
 
   isValid: boolean;
-  userFirstName: string;
+  userName: string;
   subscription: Subscription;
 
-  constructor(private authService: AuthService, private ref: ChangeDetectorRef) { }
+  constructor(private authService: AuthService) { }
 
   ngOnInit() {
     this.subscription = this.authService.validityUpdated.subscribe(
       (obj: any) => {
         this.isValid = obj.isValid;
-        this.userFirstName = obj.userFirstName;
-        console.log(this.isValid);
-        // this.ref.detectChanges();
+        this.userName = obj.userName;
       }
     );
     this.isValid = this.authService.isAuthenticated();
-    this.userFirstName = this.authService.userFirstName;
-    console.log(this.isValid);
+    this.userName = this.authService.userName;
   }
 
   ngOnChanges(changes: SimpleChanges) {

@@ -1,5 +1,5 @@
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
-import { Injectable, EventEmitter } from '@angular/core';
+import { Injectable, EventEmitter, NgZone } from '@angular/core';
 import 'rxjs/Rx';
 import { Observable } from "rxjs/Observable";
 import { Subject } from 'rxjs/Subject';
@@ -10,9 +10,8 @@ import * as firebase from 'firebase';
 export class AuthService {
 
   isValid: boolean = false;
-  userFirstName: string = '';
-  userLastName: string = '';
-  userEmail: string = 'test@test.com';
+  userName: string = '';
+  userEmail: string = '';
   providerGoogle = new firebase.auth.GoogleAuthProvider();
   providerGithub = new firebase.auth.GithubAuthProvider();
   providerTwitter = new firebase.auth.TwitterAuthProvider();
@@ -21,23 +20,26 @@ export class AuthService {
 
   validityUpdated = new Subject<{}>();
 
-  constructor(private http: Http, private router: Router) { }
+  constructor(private http: Http, private router: Router, private zone: NgZone) { }
 
   onSignInGoogle() {
     firebase.auth().signInWithPopup(this.providerGoogle).then((result) => {
       this.token = result.credential.accessToken;
-      this.userFirstName = result.additionalUserInfo.profile.given_name;
-      this.userLastName = result.additionalUserInfo.profile.family_name;
+      this.userName = result.additionalUserInfo.profile.name;
+      this.userEmail = result.additionalUserInfo.profile.email;
       // console.log(result.additionalUserInfo.profile);
 
       this.validityUpdated.next({
         isValid: this.isAuthenticated(),
-        userFirstName: this.userFirstName,
-        userLastName: this.userLastName
+        userName: this.userName,
+        userEmail: this.userEmail
       });
 
-      this.router.navigate(['']);
+      this.zone.run(() => {
+        this.router.navigate(['']);
+      })
     }).catch((error) => {
+      alert(error.message);
       console.log(error);
     })
   }
@@ -45,18 +47,21 @@ export class AuthService {
   onSignInGithub() {
     firebase.auth().signInWithPopup(this.providerGithub).then((result) => {
       this.token = result.credential.accessToken;
-      this.userFirstName = result.additionalUserInfo.profile.name;
-      // this.userLastName = result.additionalUserInfo.profile.family_name;
-      // console.log(result);
+      this.userName = result.additionalUserInfo.profile.name;
+      this.userEmail = result.additionalUserInfo.profile.email;
+      // console.log(result.additionalUserInfo);
 
       this.validityUpdated.next({
         isValid: this.isAuthenticated(),
-        userFirstName: this.userFirstName,
-        userLastName: this.userLastName
+        userName: this.userName,
+        userEmail: this.userEmail
       });
 
-      this.router.navigate(['']);
+      this.zone.run(() => {
+        this.router.navigate(['']);
+      })
     }).catch((error) => {
+      alert(error.message);
       console.log(error);
     })
   }
@@ -64,18 +69,21 @@ export class AuthService {
   onSignInTwitter() {
     firebase.auth().signInWithPopup(this.providerTwitter).then((result) => {
       this.token = result.credential.accessToken;
-      // this.userFirstName = result.additionalUserInfo.profile.given_name;
-      // this.userLastName = result.additionalUserInfo.profile.family_name;
-      console.log(result);
+      this.userName = result.additionalUserInfo.profile.name;
+      this.userEmail = result.additionalUserInfo.username;
+      // console.log(result);
 
       this.validityUpdated.next({
         isValid: this.isAuthenticated(),
-        userFirstName: this.userFirstName,
-        userLastName: this.userLastName
+        userName: this.userName,
+        userEmail: this.userEmail
       });
 
-      this.router.navigate(['']);
+      this.zone.run(() => {
+        this.router.navigate(['']);
+      })
     }).catch((error) => {
+      alert(error.message);
       console.log(error);
     })
   }
@@ -83,18 +91,21 @@ export class AuthService {
   onSignInFacebook() {
     firebase.auth().signInWithPopup(this.providerFacebook).then((result) => {
       this.token = result.credential.accessToken;
-      this.userFirstName = result.additionalUserInfo.profile.first_name;
-      this.userLastName = result.additionalUserInfo.profile.last_name;
-      console.log(result);
+      this.userName = result.additionalUserInfo.profile.name;
+      this.userEmail = result.additionalUserInfo.profile.email;
+      // console.log(result.additionalUserInfo.profile);
 
       this.validityUpdated.next({
         isValid: this.isAuthenticated(),
-        userFirstName: this.userFirstName,
-        userLastName: this.userLastName
+        userName: this.userName,
+        userEmail: this.userEmail
       });
 
-      this.router.navigate(['']);
+      this.zone.run(() => {
+        this.router.navigate(['']);
+      })
     }).catch((error) => {
+      alert(error.message);
       console.log(error);
     })
   }
@@ -104,15 +115,14 @@ export class AuthService {
     this.token = null;
     this.validityUpdated.next({
       isValid: this.isAuthenticated(),
-      userFirstName: this.userFirstName,
-      userLastName: this.userLastName
+      userName: this.userName
     });
 
     this.router.navigate(['/']);
   }
 
   isAuthenticated() {
-    // return this.token != null;
-    return true;
+    return this.token != null;
+    // return true;
   }
 }

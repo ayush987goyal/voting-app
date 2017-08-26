@@ -10,10 +10,12 @@ import { Router } from '@angular/router';
 export class HomeComponent implements OnInit {
 
   pollList = [];
+  isLoading: boolean = false;
 
   constructor(private mongoService: MongoService, private router: Router) { }
 
   ngOnInit() {
+    this.isLoading = true;
     this.mongoService.getAllPolls().subscribe(
       (res) => {
         for (let item of res) {
@@ -22,15 +24,16 @@ export class HomeComponent implements OnInit {
             id: item._id
           });
         }
+        this.isLoading = false;
       },
       (err) => {
         console.log(err);
+        this.isLoading = false;
       }
     );
   }
 
   onClickPoll (index) {
-    console.log(index);
     this.router.navigate(['/poll/' + this.pollList[index]['id']]);
   }
 

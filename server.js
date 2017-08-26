@@ -11,11 +11,6 @@ app.use(bodyParser.json());
 app.use(express.static(path.resolve(__dirname, 'views/dist')));
 
 
-
-app.get("/home", (req, res) => {
-    res.send({msg: 'hello mate!'});
-});
-
 app.get('/polls', (req, res) => {
     myMongo.getAllPolls((err, data) => {
         if(err) throw err;
@@ -32,6 +27,30 @@ app.get('/polls/:id', (req, res) => {
     })
 })
 
+app.get('/pollsMy/:user', (req, res) => {
+    myMongo.getPollByUser(req.params.user, (err, data) => {
+        if(err) throw err;
+
+        res.send(data);
+    })
+})
+
+app.get('/pollDel/:id', (req, res) => {
+    myMongo.deletePollById(req.params.id, (err, data) => {
+        if(err) throw err;
+
+        res.send(data);
+    })
+})
+
+app.post('/pollsMy', (req, res) => {
+    myMongo.updatePoll(req.body, (err, data) => {
+        if(err) throw err;
+
+        res.send(data);
+    })
+})
+
 app.post('/newpoll', (req, res) => {
     myMongo.addNewPoll(req.body, (err, data) => {
         if(err) throw err;
@@ -40,9 +59,9 @@ app.post('/newpoll', (req, res) => {
     })
 })
 
-app.get('/*', (req, res) => {
-    res.sendFile(path.resolve(__dirname, 'views/dist/index.html'));
-})
+// app.get('/*', (req, res) => {
+//     res.sendFile(path.resolve(__dirname, 'views/dist/index.html'));
+// })
 
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0",  () => {
     var addr = server.address();

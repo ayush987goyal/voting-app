@@ -15,7 +15,7 @@
                     <li><a routerLink="/login">Login</a></li>
                 </ng-template>
                 <ng-template [ngIf]="isValid">
-                    <li><a style="cursor: pointer;" routerLink="/mypolls">{{userFirstName}}</a></li>
+                    <li><a style="cursor: pointer;" routerLink="/mypolls">{{userName}}</a></li>
                     <li><a style="cursor: pointer;" (click)="onSignOut()">Logout</a></li>
                 </ng-template>
           </ul>

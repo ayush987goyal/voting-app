@@ -15,6 +15,8 @@ import { NewpollComponent } from './core/newpoll/newpoll.component';
 import { MypollsComponent } from './core/mypolls/mypolls.component';
 import { PollComponent } from './core/poll/poll.component';
 import { MongoService } from './mongo.service';
+import { DialogModule } from 'primeng/primeng';
+import { ChartsModule } from 'ng2-charts/ng2-charts';
 
 @NgModule({
   declarations: [
@@ -32,7 +34,9 @@ import { MongoService } from './mongo.service';
     BrowserAnimationsModule,
     AuthModule,
     FormsModule,
-    HttpModule
+    HttpModule,
+    DialogModule,
+    ChartsModule
   ],
   providers: [MongoService],//, {provide: APP_BASE_HREF, useValue: '/polls'}],
   bootstrap: [AppComponent]
